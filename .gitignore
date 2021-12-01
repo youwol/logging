@@ -3,4 +3,6 @@ node_modules
 dist/
 coverage/
 junit.xml
+*.iml
+yarn-error.log
 src/auto_generated.ts

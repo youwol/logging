@@ -1,64 +1,69 @@
-/** @format */
+import { backendConsole } from './backends'
+import { Backend, Level } from './logging'
 
-import { backendConsole } from "./backends";
-import { Backend, Level } from "./logging";
-
-export type BackendWithLevel = { backend: Backend; level: Level };
+export type BackendWithLevel = { backend: Backend; level: Level }
 
 export type Route = {
-  id: string;
-  level: Level;
-  backendsLevels: BackendWithLevel[];
-  paths: Path[];
-};
+    id: string
+    level: Level
+    backendsLevels: BackendWithLevel[]
+    paths: Path[]
+}
 
 export type Path = {
-  path: string;
-  level: Level;
-};
+    path: string
+    level: Level
+}
 
-export type Routing = Route[];
+export type Routing = Route[]
 
-export const defaultRoutingId = "default_route";
+export const defaultRoutingId = 'default_route'
 
 export function setPath(
-  path: string,
-  level: Level = Level.DEBUG,
-  route: string = defaultRoutingId
+    path: string,
+    level: Level = 'debug',
+    route: string = defaultRoutingId,
 ) {
-  routing
-    .find((candidate) => candidate.id === route)
-    .paths.push({ path, level });
+    routing
+        .find((candidate) => candidate.id === route)
+        ?.paths.push({ path, level })
 }
 
 export function setBackend(
-  backend: Backend,
-  level: Level = Level.DEBUG,
-  route: string = defaultRoutingId
+    backend: Backend,
+    level: Level = 'debug',
+    route: string = defaultRoutingId,
 ) {
-  routing
-    .find((candidate) => candidate.id === route)
-    .backendsLevels.push({ backend, level });
+    routing
+        .find((candidate) => candidate.id === route)
+        ?.backendsLevels.push({ backend, level })
 }
 
-export function setRouteLevel(level: Level, route: string = defaultRoutingId) {
-  routing.find((candidate) => candidate.id === route).level = level;
+export function setRouteLevel(
+    level: Level,
+    routeId: string = defaultRoutingId,
+) {
+    const route = routing.find((candidate) => candidate.id === routeId)
+    if (route !== undefined) {
+        route.level = level
+    }
 }
 
 const routing: Routing = [
-  {
-    id: defaultRoutingId,
-    level: Level.DEBUG,
-    backendsLevels: [{ backend: backendConsole, level: Level.DEBUG }],
-    paths: [
-      { path: "/", level: Level.DEBUG },
-      { path: "/layout-editor", level: Level.INFO },
-    ],
-  },
-];
+    {
+        id: defaultRoutingId,
+        level: 'debug',
+        backendsLevels: [{ backend: backendConsole, level: 'debug' }],
+        paths: [
+            { path: '/', level: 'info' },
+            { path: '/@youwol/flux-builder', level: 'debug' },
+            { path: '/@youwol/flux-core/Modules', level: 'debug' },
+        ],
+    },
+]
 
 export function getRouting(): Routing {
-  return clone(routing);
+    return clone(routing)
 }
 
 /**
@@ -66,32 +71,29 @@ export function getRouting(): Routing {
  *
  * @param ref
  */
-function clone(ref) {
-  let result;
-
-  // Handle the 3 simple types, and null or undefined
-  if (null == ref || "object" != typeof ref) {
-    return ref;
-  }
-
-  // Handle Array
-  if (Array.isArray(ref)) {
-    result = [];
-    for (let i = 0, len = ref.length; i < len; i++) {
-      result[i] = clone(ref[i]);
+/* eslint-disable @typescript-eslint/no-explicit-any -- Low level stuff */
+function clone(ref: any): any {
+    // Handle the 3 simple types, and null or undefined
+    if (null == ref || 'object' != typeof ref) {
+        return ref
     }
-    return result;
-  }
 
-  // Handle Object
-  if (ref instanceof Object) {
-    result = {};
-    for (const attr in ref) {
-      // eslint-disable-next-line no-prototype-builtins -- Dirty hack
-      if (ref.hasOwnProperty(attr)) {
-        result[attr] = clone(ref[attr]);
-      }
+    // Handle Array
+    if (Array.isArray(ref)) {
+        const result = []
+        for (let i = 0, len = ref.length; i < len; i++) {
+            result[i] = clone(ref[i])
+        }
+        return result
     }
-    return result;
-  }
+
+    // Handle Object
+    if (ref instanceof Object) {
+        const result: any = {}
+        for (const attr in ref) {
+            result[attr] = clone(ref[attr])
+        }
+        return result
+    }
 }
+/* eslint-enable @typescript-eslint/no-explicit-any -- Low level stuff */
