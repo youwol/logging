@@ -2,6 +2,7 @@
     "name": "@youwol/logging",
     "version": "0.0.2-next",
     "description": "",
+    "version": "0.1.0-wip",
     "author": "",
     "keywords": [],
     "main": "dist/@youwol/logging.js",
