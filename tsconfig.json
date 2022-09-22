@@ -1,7 +1,6 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "strict": true,
         "outDir": "./dist",
         "sourceMap": true,
         "declaration": true,
@@ -17,5 +16,10 @@
         "typeRoots": ["node_modules/@types"],
         "lib": ["es5", "es6", "dom", "es2020"],
         "paths": {}
+    },
+    "ts-node": {
+        "compilerOptions": {
+            "module": "CommonJS"
+        }
     }
 }
