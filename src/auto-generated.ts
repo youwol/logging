@@ -22,7 +22,7 @@ export const setup = {
     name:'@youwol/logging',
         assetId:'QHlvdXdvbC9sb2dnaW5n',
     version:'0.1.0',
-    shortDescription:"",
+    shortDescription:"Logging for Youwol front apps",
     developerDocumentation:'https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@youwol/logging',
     npmPackage:'https://www.npmjs.com/package/@youwol/logging',
     sourceGithub:'https://github.com/youwol/logging',
