@@ -24,7 +24,11 @@ template = Template(
                 '@youwol/flux-view': '^1.1.0',
                 '@youwol/fv-tree': '^0.2.3',
             }
-        )
+        ),
+        devTime={
+            # Included for type definitions
+            "@youwol/cdn-client": "^1.0.10"
+        }
     ),
     bundles=Bundles(
         mainModule=MainModule(
