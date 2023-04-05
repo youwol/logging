@@ -3,8 +3,7 @@ const runTimeDependencies = {
     "externals": {
         "rxjs": "^6.5.5",
         "@youwol/flux-view": "^1.1.0",
-        "@youwol/fv-tree": "^0.2.3",
-        "@youwol/cdn-client": "^1.0.10"
+        "@youwol/fv-tree": "^0.2.3"
     },
     "includedInBundle": {}
 }
@@ -23,11 +22,6 @@ const externals = {
         "commonjs": "@youwol/fv-tree",
         "commonjs2": "@youwol/fv-tree",
         "root": "@youwol/fv-tree_APIv02"
-    },
-    "@youwol/cdn-client": {
-        "commonjs": "@youwol/cdn-client",
-        "commonjs2": "@youwol/cdn-client",
-        "root": "@youwol/cdn-client_APIv1"
     }
 }
 const exportedSymbols = {
@@ -42,10 +36,6 @@ const exportedSymbols = {
     "@youwol/fv-tree": {
         "apiKey": "02",
         "exportedSymbol": "@youwol/fv-tree"
-    },
-    "@youwol/cdn-client": {
-        "apiKey": "1",
-        "exportedSymbol": "@youwol/cdn-client"
     }
 }
 
@@ -59,7 +49,8 @@ const secondaryEntries : {[k:string]:{entryFile: string, name: string, loadDepen
         "entryFile": "./lib/journal/index.ts",
         "loadDependencies": [
             "rxjs",
-            "@youwol/flux-view"
+            "@youwol/flux-view",
+            "@youwol/fv-tree"
         ],
         "name": "journal"
     }

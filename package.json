@@ -22,6 +22,7 @@
         "publish-npm-public": "yarn build:prod && yarn test-coverage && yarn publish --access public"
     },
     "devDependencies": {
+        "@youwol/cdn-client": "^1.0.10",
         "@types/node": "^18.14.2",
         "typescript": "^4.7.4",
         "ts-lib": "^0.0.5",
@@ -49,8 +50,7 @@
     "dependencies": {
         "rxjs": "^6.5.5",
         "@youwol/flux-view": "^1.1.0",
-        "@youwol/fv-tree": "^0.2.3",
-        "@youwol/cdn-client": "^1.0.10"
+        "@youwol/fv-tree": "^0.2.3"
     },
     "youwol": {
         "cdnDependencies": {}
