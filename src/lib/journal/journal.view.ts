@@ -294,6 +294,7 @@ function headerView(
     dataViewsFactory: DataViewsFactory,
 ) {
     const heightBar = '3px'
+    const sizePoint = '5px'
     if (node instanceof ContextNode) {
         const tStart =
             node.context.startTimestamp - state.rootCtx.startTimestamp
@@ -361,8 +362,8 @@ function headerView(
                 {
                     class: 'fv-bg-success rounded',
                     style: {
-                        height: heightBar,
-                        //width: heightBar,
+                        height: sizePoint,
+                        width: sizePoint,
                         top: '0px',
                         position: 'absolute',
                         left: `calc( ${left}% - 5px)`,
