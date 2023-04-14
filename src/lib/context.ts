@@ -156,6 +156,48 @@ export enum ContextStatus {
     RUNNING = 'running',
     FAILED = 'failed',
 }
+
+/**
+ * Trait for logging using context.
+ */
+export interface ContextLoggerTrait {
+    error(error: Error, data?: unknown)
+
+    warning(text: string, data?: unknown)
+
+    info(text: string, data?: unknown)
+
+    withChild<T>(
+        title: string,
+        callback: (context: ContextLoggerTrait) => T,
+        withUserInfo?: { [key: string]: unknown },
+    ): T
+
+    withChildAsync<T>(
+        title: string,
+        callback: (context: Context) => Promise<T>,
+        withUserInfo?: { [key: string]: unknown },
+    ): Promise<T>
+
+    startChild: (
+        title: string,
+        withUserInfo?: { [key: string]: unknown },
+    ) => ContextLoggerTrait
+
+    end(): void
+    terminate(): void
+}
+
+/**
+ * Trait for reporting using context.
+ */
+export interface ContextReportedTrait {
+    children: (Context | Log)[]
+    id: string
+    startTimestamp: number
+    elapsed(from?: number): number | undefined
+}
+
 /**
  * ## Context
  *
@@ -183,7 +225,7 @@ export enum ContextStatus {
  * -    [[Context]] : a child context
  *
  */
-export class Context {
+export class Context implements ContextLoggerTrait, ContextReportedTrait {
     public readonly type = 'Context'
 
     /**
@@ -262,21 +304,31 @@ export class Context {
         callback: (context: Context) => T,
         withUserInfo: { [key: string]: unknown } = {},
     ): T {
-        const childContext = new Context(
-            title,
-            { ...this.userContext, ...withUserInfo },
-            this.channels$,
-            this,
-        )
-        this.children.push(childContext)
+        const childContext = this.appendChildContext(title, withUserInfo)
         try {
             const result = callback(childContext)
             childContext.end()
             return result
         } catch (error) {
-            childContext.error(error, error.data || error.status)
+            this.onScopeError(error, childContext)
+        }
+    }
+
+    /**
+     * Async version of {@link withChild}
+     */
+    async withChildAsync<T>(
+        title: string,
+        callback: (context: Context) => Promise<T>,
+        withUserInfo: { [key: string]: unknown } = {},
+    ): Promise<T> {
+        const childContext = this.appendChildContext(title, withUserInfo)
+        try {
+            const result = await callback(childContext)
             childContext.end()
-            throw error
+            return result
+        } catch (error) {
+            this.onScopeError(error, childContext)
         }
     }
 
@@ -388,4 +440,62 @@ export class Context {
         this.children.push(log)
         this.channels$.forEach((channel) => channel.dispatch(log))
     }
+
+    private onScopeError(error, context: Context) {
+        context.error(error, error.data || error.status)
+        context.end()
+        throw error
+    }
+
+    private appendChildContext(
+        title: string,
+        withUserInfo: { [key: string]: unknown },
+    ) {
+        const childContext = new Context(
+            title,
+            { ...this.userContext, ...withUserInfo },
+            this.channels$,
+            this,
+        )
+        this.children.push(childContext)
+        return childContext
+    }
+}
+
+export const NoContext: ContextLoggerTrait = {
+    error: (_error: Error, _data?: unknown) => {
+        /**No op*/
+    },
+    warning: (_text: string, _data?: unknown) => {
+        /**No op*/
+    },
+    info: (_text: string, _data?: unknown) => {
+        /**No op*/
+    },
+
+    withChild: <T>(
+        _title: string,
+        callback: (context) => T,
+        _withUserInfo?: { [key: string]: unknown },
+    ) => {
+        return callback(NoContext)
+    },
+
+    withChildAsync: <T>(
+        _title: string,
+        callback: (context) => T,
+        _withUserInfo?: { [key: string]: unknown },
+    ) => {
+        return callback(NoContext)
+    },
+
+    startChild: (_title: string, _withUserInfo: { [key: string]: unknown }) =>
+        NoContext,
+
+    end: () => {
+        /*no op*/
+    },
+    terminate: () => {
+        /*no op*/
+    },
 }
