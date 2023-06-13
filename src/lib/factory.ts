@@ -138,7 +138,10 @@ const thisModuleLog: Logger = new ConcreteLogger({ path: '/logging/factory' }, [
     { backend: backendConsole, level: 'notice' },
 ])
 
-thisModuleLog.debug(document.documentURI)
+if (globalThis.document) {
+    // This guard allows loading the library in a worker
+    thisModuleLog.debug(globalThis.document.documentURI)
+}
 
 loggers.set('/logging/factory', thisModuleLog)
 
