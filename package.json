@@ -22,7 +22,7 @@
         "publish-npm-public": "yarn build:prod && yarn test-coverage && yarn publish --access public"
     },
     "devDependencies": {
-        "@youwol/cdn-client": "^1.0.10",
+        "@youwol/cdn-client": "^2.0.3",
         "@types/node": "^18.14.2",
         "typescript": "^4.7.4",
         "ts-lib": "^0.0.5",
