@@ -27,7 +27,7 @@ template = Template(
         ),
         devTime={
             # Included for type definitions
-            "@youwol/cdn-client": "^1.0.10"
+            "@youwol/cdn-client": "^2.0.3"
         }
     ),
     bundles=Bundles(
