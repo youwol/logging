@@ -2,8 +2,8 @@ import shutil
 from pathlib import Path
 
 from youwol.pipelines.pipeline_typescript_weback_npm import Template, PackageType, Dependencies, \
-    RunTimeDeps, generate_template, Bundles, MainModule
-from youwol_utils import parse_json
+    RunTimeDeps, generate_template, Bundles, MainModule, AuxiliaryModule
+from youwol.utils import parse_json
 
 folder_path = Path(__file__).parent
 
@@ -19,13 +19,29 @@ template = Template(
     author=pkg_json['author'],
     dependencies=Dependencies(
         runTime=RunTimeDeps(
-        )
+            externals={
+                'rxjs': '^6.5.5',
+                '@youwol/flux-view': '^1.1.0',
+                '@youwol/fv-tree': '^0.2.3',
+            }
+        ),
+        devTime={
+            # Included for type definitions
+            "@youwol/cdn-client": "^2.0.3"
+        }
     ),
     bundles=Bundles(
         mainModule=MainModule(
             entryFile="./lib/index.ts",
             loadDependencies=[]
-        )
+        ),
+        auxiliaryModules=[
+            AuxiliaryModule(
+                name='journal',
+                entryFile="./lib/journal/index.ts",
+                loadDependencies=['rxjs', '@youwol/flux-view', '@youwol/fv-tree']
+            )
+        ]
     ),
     userGuide=True
 )
