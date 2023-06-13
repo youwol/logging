@@ -226,10 +226,10 @@ export class ContextState extends ImmutableTree.State<NodeBase> {
         selectedNode?: string
     }) {
         super({
-            rootNode: nodeFactory(context.root()),
+            rootNode: nodeFactory(context),
             expandedNodes,
         })
-        this.rootCtx = context.root()
+        this.rootCtx = context
         this.context = context
         this.tStart = this.rootCtx.startTimestamp
         this.tEnd = this.rootCtx.startTimestamp + this.rootCtx.elapsed()
