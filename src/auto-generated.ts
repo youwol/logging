@@ -63,9 +63,9 @@ const entries = {
 export const setup = {
     name:'@youwol/logging',
         assetId:'QHlvdXdvbC9sb2dnaW5n',
-    version:'0.1.1-wip',
+    version:'0.1.1',
     shortDescription:"Logging for Youwol front apps",
-    developerDocumentation:'https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@youwol/logging',
+    developerDocumentation:'https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@youwol/logging&tab=doc',
     npmPackage:'https://www.npmjs.com/package/@youwol/logging',
     sourceGithub:'https://github.com/youwol/logging',
     userGuide:'https://l.youwol.com/doc/@youwol/logging',
@@ -109,7 +109,7 @@ export const setup = {
         const parameters = installParameters || {}
         const scripts = [
             ...(parameters.scripts || []),
-            `@youwol/logging#0.1.1-wip~dist/@youwol/logging/${entry.name}.js`
+            `@youwol/logging#0.1.1~dist/@youwol/logging/${entry.name}.js`
         ]
         const modules = [
             ...(parameters.modules || []),
