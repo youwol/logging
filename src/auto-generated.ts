@@ -1,9 +1,9 @@
 
 const runTimeDependencies = {
     "externals": {
-        "rxjs": "^6.5.5",
-        "@youwol/flux-view": "^1.1.0",
-        "@youwol/fv-tree": "^0.2.3"
+        "rxjs": "^7.5.6",
+        "@youwol/rx-vdom": "^1.0.1",
+        "@youwol/rx-tree-views": "^0.3.1"
     },
     "includedInBundle": {}
 }
@@ -11,31 +11,31 @@ const externals = {
     "rxjs": {
         "commonjs": "rxjs",
         "commonjs2": "rxjs",
-        "root": "rxjs_APIv6"
+        "root": "rxjs_APIv7"
     },
-    "@youwol/flux-view": {
-        "commonjs": "@youwol/flux-view",
-        "commonjs2": "@youwol/flux-view",
-        "root": "@youwol/flux-view_APIv1"
+    "@youwol/rx-vdom": {
+        "commonjs": "@youwol/rx-vdom",
+        "commonjs2": "@youwol/rx-vdom",
+        "root": "@youwol/rx-vdom_APIv1"
     },
-    "@youwol/fv-tree": {
-        "commonjs": "@youwol/fv-tree",
-        "commonjs2": "@youwol/fv-tree",
-        "root": "@youwol/fv-tree_APIv02"
+    "@youwol/rx-tree-views": {
+        "commonjs": "@youwol/rx-tree-views",
+        "commonjs2": "@youwol/rx-tree-views",
+        "root": "@youwol/rx-tree-views_APIv03"
     }
 }
 const exportedSymbols = {
     "rxjs": {
-        "apiKey": "6",
+        "apiKey": "7",
         "exportedSymbol": "rxjs"
     },
-    "@youwol/flux-view": {
+    "@youwol/rx-vdom": {
         "apiKey": "1",
-        "exportedSymbol": "@youwol/flux-view"
+        "exportedSymbol": "@youwol/rx-vdom"
     },
-    "@youwol/fv-tree": {
-        "apiKey": "02",
-        "exportedSymbol": "@youwol/fv-tree"
+    "@youwol/rx-tree-views": {
+        "apiKey": "03",
+        "exportedSymbol": "@youwol/rx-tree-views"
     }
 }
 
@@ -49,8 +49,8 @@ const secondaryEntries : {[k:string]:{entryFile: string, name: string, loadDepen
         "entryFile": "./lib/journal/index.ts",
         "loadDependencies": [
             "rxjs",
-            "@youwol/flux-view",
-            "@youwol/fv-tree"
+            "@youwol/rx-vdom",
+            "@youwol/rx-tree-views"
         ],
         "name": "journal"
     }
@@ -63,13 +63,13 @@ const entries = {
 export const setup = {
     name:'@youwol/logging',
         assetId:'QHlvdXdvbC9sb2dnaW5n',
-    version:'0.1.1',
+    version:'0.2.0-wip',
     shortDescription:"Logging for Youwol front apps",
     developerDocumentation:'https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@youwol/logging&tab=doc',
     npmPackage:'https://www.npmjs.com/package/@youwol/logging',
     sourceGithub:'https://github.com/youwol/logging',
     userGuide:'https://l.youwol.com/doc/@youwol/logging',
-    apiVersion:'01',
+    apiVersion:'02',
     runTimeDependencies,
     externals,
     exportedSymbols,
@@ -94,7 +94,7 @@ export const setup = {
             modules,
             scripts,
         }).then(() => {
-            return window[`@youwol/logging_APIv01`]
+            return window[`@youwol/logging_APIv02`]
         })
     },
     installAuxiliaryModule: ({name, cdnClient, installParameters}:{
@@ -109,7 +109,7 @@ export const setup = {
         const parameters = installParameters || {}
         const scripts = [
             ...(parameters.scripts || []),
-            `@youwol/logging#0.1.1~dist/@youwol/logging/${entry.name}.js`
+            `@youwol/logging#0.2.0-wip~dist/@youwol/logging/${entry.name}.js`
         ]
         const modules = [
             ...(parameters.modules || []),
@@ -120,7 +120,7 @@ export const setup = {
             modules,
             scripts,
         }).then(() => {
-            return window[`@youwol/logging/${entry.name}_APIv01`]
+            return window[`@youwol/logging/${entry.name}_APIv02`]
         })
     },
     getCdnDependencies(name?: string){
