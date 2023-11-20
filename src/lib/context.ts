@@ -397,7 +397,7 @@ export class Context implements ContextLoggerTrait, ContextReportedTrait {
      */
     terminate() {
         this.end()
-        this.parent && this.parent.terminate()
+        this.parent?.terminate()
     }
 
     /**
