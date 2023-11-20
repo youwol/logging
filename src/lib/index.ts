@@ -9,7 +9,7 @@ export * as Journal from './journal/types'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Dirty hack
 // @ts-ignore
 window['LogRouting'] = { setRouteLevel, setBackend, setPath, getRouting }
-export type CdnClient = typeof import('@youwol/cdn-client')
+export type CdnClient = typeof import('@youwol/webpm-client')
 
 export type JournalModule = typeof import('./journal')
 
