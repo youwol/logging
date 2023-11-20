@@ -206,23 +206,11 @@ class LogNodeBase extends NodeBase {
     }
 }
 
-class LogNodeInfo extends LogNodeBase {
-    constructor(d) {
-        super(d)
-    }
-}
+class LogNodeInfo extends LogNodeBase {}
 
-class LogNodeWarning extends LogNodeBase {
-    constructor(d) {
-        super(d)
-    }
-}
+class LogNodeWarning extends LogNodeBase {}
 
-class LogNodeError extends LogNodeBase {
-    constructor(d) {
-        super(d)
-    }
-}
+class LogNodeError extends LogNodeBase {}
 
 export class ContextState extends ImmutableTree.State<NodeBase> {
     public readonly tStart: number
@@ -281,7 +269,7 @@ export class ContextView implements VirtualDOM<'div'> {
         this.dataViewsFactory = dataViewsFactory || []
         const styling: OptionsContextView = {
             ...ContextView.defaultOptions,
-            ...(options ? options : {}),
+            ...(options || {}),
         }
         this.class = styling.containerClass
         this.style = styling.containerStyle
