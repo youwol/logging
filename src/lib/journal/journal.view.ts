@@ -1,6 +1,6 @@
-import { child$, VirtualDOM } from '@youwol/flux-view'
+import { VirtualDOM, ChildrenLike, AnyVirtualDOM } from '@youwol/rx-vdom'
 import { BehaviorSubject, from } from 'rxjs'
-import { ImmutableTree, ObjectJs } from '@youwol/fv-tree'
+import { ImmutableTree, ObjectJs } from '@youwol/rx-tree-views'
 import { Context, ContextStatus, uuidv4, Log } from '../context'
 import {
     DataViewsFactory,
@@ -18,17 +18,17 @@ export class JournalState {
     }
 }
 
-export class JournalView implements VirtualDOM {
+export class JournalView implements VirtualDOM<'div'> {
     static defaultOptions: OptionsJournalView = {
         containerClass: 'd-flex flex-column p-3',
         containerStyle: { 'min-height': '0px' },
     }
-
+    public readonly tag = 'div'
     public readonly state: JournalState
     public readonly dataViewsFactory: DataViewsFactory
     public readonly class: string
     public readonly style: { [key: string]: string }
-    public readonly children: Array<VirtualDOM>
+    public readonly children: ChildrenLike
 
     connectedCallback: (elem) => void
 
@@ -59,49 +59,62 @@ export class JournalView implements VirtualDOM {
         )
         this.children = [
             this.selectJournalView(pageSelected$),
-            child$(pageSelected$, (page: Page) => {
-                return this.pageView(page)
-            }),
+            {
+                source$: pageSelected$,
+                vdomMap: (page: Page) => {
+                    return this.pageView(page)
+                },
+            },
         ]
     }
 
-    noJournalsAvailableView(): VirtualDOM {
+    noJournalsAvailableView(): VirtualDOM<'div'> {
         return {
+            tag: 'div',
             innerText:
                 'The module does not contains journals yet, it is likely that it did not run already.',
         }
     }
 
-    selectJournalView(journalSelected$: BehaviorSubject<Page>): VirtualDOM {
+    selectJournalView(
+        journalSelected$: BehaviorSubject<Page>,
+    ): VirtualDOM<'div'> {
         const items = this.state.journal.pages
 
         return {
+            tag: 'div',
             class: 'd-flex align-items-center py-2',
             children: [
-                { innerText: 'Available pages:', class: 'px-2' },
+                {
+                    tag: 'div',
+                    innerText: 'Available pages:',
+                    class: 'px-2',
+                },
                 {
                     tag: 'select',
                     children: items.map((page, i) => ({
-                        tag: 'option',
+                        tag: 'option' as const,
                         innerText: page.title,
-                        value: i,
+                        value: `${i}`,
                     })),
-                    onchange: (ev) =>
-                        journalSelected$.next(items[ev.target.value]),
-                },
+                    onchange: (ev: MouseEvent) =>
+                        journalSelected$.next(items[ev.target['value']]),
+                } as VirtualDOM<'select'>,
             ],
         }
     }
 
-    pageView(page: Page): VirtualDOM {
+    pageView(page: Page): VirtualDOM<'div'> {
         const state = new ContextState({
             context: page.entryPoint,
             expandedNodes: [page.entryPoint.id],
         })
         return {
+            tag: 'div',
             class: 'h-100 d-flex flex-column',
             children: [
                 {
+                    tag: 'div',
                     class: 'd-flex align-items-center justify-content-center',
                     children: [
                         {
@@ -109,10 +122,11 @@ export class JournalView implements VirtualDOM {
                             class: 'fas fa-newspaper fa-2x px-3',
                         },
                         {
+                            tag: 'div',
                             class: 'text-center py-2',
                             style: {
-                                'font-family': 'fantasy',
-                                'font-size': 'larger',
+                                fontFamily: 'fantasy' as const,
+                                fontSize: 'larger',
                             },
                             innerText: page.title,
                         },
@@ -192,23 +206,11 @@ class LogNodeBase extends NodeBase {
     }
 }
 
-class LogNodeInfo extends LogNodeBase {
-    constructor(d) {
-        super(d)
-    }
-}
+class LogNodeInfo extends LogNodeBase {}
 
-class LogNodeWarning extends LogNodeBase {
-    constructor(d) {
-        super(d)
-    }
-}
+class LogNodeWarning extends LogNodeBase {}
 
-class LogNodeError extends LogNodeBase {
-    constructor(d) {
-        super(d)
-    }
-}
+class LogNodeError extends LogNodeBase {}
 
 export class ContextState extends ImmutableTree.State<NodeBase> {
     public readonly tStart: number
@@ -237,16 +239,17 @@ export class ContextState extends ImmutableTree.State<NodeBase> {
     }
 }
 
-export class ContextView implements VirtualDOM {
+export class ContextView implements VirtualDOM<'div'> {
     static defaultOptions = {
         containerClass: 'p-4 fv-bg-background fv-text-primary',
         containerStyle: { width: '100%', height: '100%' },
         treeViewClass: 'h-100 overflow-auto',
         treeViewStyle: {},
     }
+    public readonly tag = 'div'
     public readonly domId: string = 'contextView-view'
     public readonly state: ContextState
-    public readonly children: Array<VirtualDOM>
+    public readonly children: ChildrenLike
     public readonly dataViewsFactory: DataViewsFactory
     public readonly class: string
     public readonly style: { [key: string]: string }
@@ -266,7 +269,7 @@ export class ContextView implements VirtualDOM {
         this.dataViewsFactory = dataViewsFactory || []
         const styling: OptionsContextView = {
             ...ContextView.defaultOptions,
-            ...(options ? options : {}),
+            ...(options || {}),
         }
         this.class = styling.containerClass
         this.style = styling.containerStyle
@@ -292,7 +295,7 @@ function headerView(
     state: ContextState,
     node: NodeBase,
     dataViewsFactory: DataViewsFactory,
-) {
+): VirtualDOM<'div'> {
     const heightBar = '3px'
     const sizePoint = '5px'
     if (node instanceof ContextNode) {
@@ -308,9 +311,11 @@ function headerView(
             [ContextStatus.RUNNING]: 'fas fa-cog fa-spin',
         }
         return {
+            tag: 'div',
             class: 'w-100 pb-2',
             children: [
                 {
+                    tag: 'div',
                     class: 'd-flex align-items-center',
                     children: [
                         {
@@ -318,13 +323,15 @@ function headerView(
                             class: classes[node.context.status()],
                         },
                         {
+                            tag: 'div',
                             innerText: node.context.title + `  - ${elapsed} ms`,
                             class: 'fv-pointer px-2',
-                            style: { 'font-family': 'fantasy' },
+                            style: { fontFamily: 'fantasy' as const },
                         },
                     ],
                 },
                 {
+                    tag: 'div',
                     class: 'fv-bg-success',
                     style: {
                         top: '0px',
@@ -350,16 +357,26 @@ function headerView(
             classes = 'fv-text-focus fas fa-exclamation'
         }
         return {
+            tag: 'div',
             class: 'pb-1 fv-pointer w-100',
             children: [
                 {
+                    tag: 'div',
                     class: 'd-flex align-items-center',
                     children: [
-                        { class: classes },
-                        { innerText: node.log.text, class: 'px-2' },
+                        {
+                            tag: 'div',
+                            class: classes,
+                        },
+                        {
+                            tag: 'div',
+                            innerText: node.log.text,
+                            class: 'px-2',
+                        },
                     ],
                 },
                 {
+                    tag: 'div',
                     class: 'fv-bg-success rounded',
                     style: {
                         height: sizePoint,
@@ -379,11 +396,15 @@ function headerView(
 
         if (views.length > 0) {
             return {
+                tag: 'div',
                 class: 'd-flex flex-grow-1',
-                style: { 'white-space': 'nowrap', 'min-width': '0px' },
-                children: views.map((view) => {
-                    view instanceof Promise
-                        ? child$(from(view), (v) => v)
+                style: { whiteSpace: 'nowrap', minWidth: '0px' },
+                children: views.map((view: AnyVirtualDOM) => {
+                    return view instanceof Promise
+                        ? {
+                              source$: from(view),
+                              vdomMap: (v: AnyVirtualDOM) => v,
+                          }
                         : view
                 }),
             }
@@ -395,8 +416,12 @@ function headerView(
             expandedNodes: ['_0'],
         })
         return {
+            tag: 'div',
             children: [new ObjectJs.View({ state: dataState })],
         }
     }
-    return { innerText: 'unknown type' }
+    return {
+        tag: 'div',
+        innerText: 'unknown type',
+    }
 }

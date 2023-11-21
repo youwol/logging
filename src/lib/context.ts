@@ -60,7 +60,11 @@ export class Log {
 export class ErrorLog<TError extends Error, TData = unknown> extends Log {
     public readonly type = 'ErrorLog'
 
-    constructor(context: Context, public readonly error: TError, data: TData) {
+    constructor(
+        context: Context,
+        public readonly error: TError,
+        data: TData,
+    ) {
         super(context, error.message, data)
     }
 }
@@ -73,7 +77,11 @@ export class ErrorLog<TError extends Error, TData = unknown> extends Log {
 export class WarningLog extends Log {
     public readonly type = 'WarningLog'
 
-    constructor(context: Context, public readonly text: string, data: unknown) {
+    constructor(
+        context: Context,
+        public readonly text: string,
+        data: unknown,
+    ) {
         super(context, text, data)
     }
 }
@@ -86,7 +94,11 @@ export class WarningLog extends Log {
 export class InfoLog extends Log {
     public readonly type = 'InfoLog'
 
-    constructor(context: Context, public readonly text: string, data: unknown) {
+    constructor(
+        context: Context,
+        public readonly text: string,
+        data: unknown,
+    ) {
         super(context, text, data)
     }
 }
@@ -385,7 +397,7 @@ export class Context implements ContextLoggerTrait, ContextReportedTrait {
      */
     terminate() {
         this.end()
-        this.parent && this.parent.terminate()
+        this.parent?.terminate()
     }
 
     /**

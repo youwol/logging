@@ -10,7 +10,7 @@ export const levels = [
     'alert',
 ] as const
 
-export type Level = typeof levels[number]
+export type Level = (typeof levels)[number]
 
 export interface Logger {
     debug(message: string, ...messageArgs: MessageArg<unknown>[]): void

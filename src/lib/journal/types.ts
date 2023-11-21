@@ -1,5 +1,5 @@
 import { Context } from '../context'
-import { VirtualDOM } from '@youwol/flux-view'
+import { AnyVirtualDOM } from '@youwol/rx-vdom'
 
 export type Page = {
     title: string
@@ -17,7 +17,7 @@ export type DataViewsFactory = {
     name: string
     description?: string
     isCompatible: (data: unknown) => boolean
-    view: (data: unknown) => VirtualDOM | Promise<VirtualDOM>
+    view: (data: unknown) => AnyVirtualDOM | Promise<AnyVirtualDOM>
 }[]
 
 export type OptionsJournalView = {
