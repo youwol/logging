@@ -1,7 +1,7 @@
 {
     "name": "@youwol/logging",
     "description": "Logging for Youwol front apps",
-    "version": "0.2.0",
+    "version": "0.2.1-wip",
     "author": "",
     "homepage": "https://github.com/youwol/logging#README.md",
     "main": "dist/@youwol/logging.js",
