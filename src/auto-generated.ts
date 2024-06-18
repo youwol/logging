@@ -1,41 +1,41 @@
 
 const runTimeDependencies = {
     "externals": {
-        "rxjs": "^7.5.6",
+        "@youwol/rx-tree-views": "^0.3.1",
         "@youwol/rx-vdom": "^1.0.1",
-        "@youwol/rx-tree-views": "^0.3.1"
+        "rxjs": "^7.5.6"
     },
     "includedInBundle": {}
 }
 const externals = {
-    "rxjs": {
-        "commonjs": "rxjs",
-        "commonjs2": "rxjs",
-        "root": "rxjs_APIv7"
+    "@youwol/rx-tree-views": {
+        "commonjs": "@youwol/rx-tree-views",
+        "commonjs2": "@youwol/rx-tree-views",
+        "root": "@youwol/rx-tree-views_APIv03"
     },
     "@youwol/rx-vdom": {
         "commonjs": "@youwol/rx-vdom",
         "commonjs2": "@youwol/rx-vdom",
         "root": "@youwol/rx-vdom_APIv1"
     },
-    "@youwol/rx-tree-views": {
-        "commonjs": "@youwol/rx-tree-views",
-        "commonjs2": "@youwol/rx-tree-views",
-        "root": "@youwol/rx-tree-views_APIv03"
+    "rxjs": {
+        "commonjs": "rxjs",
+        "commonjs2": "rxjs",
+        "root": "rxjs_APIv7"
     }
 }
 const exportedSymbols = {
-    "rxjs": {
-        "apiKey": "7",
-        "exportedSymbol": "rxjs"
+    "@youwol/rx-tree-views": {
+        "apiKey": "03",
+        "exportedSymbol": "@youwol/rx-tree-views"
     },
     "@youwol/rx-vdom": {
         "apiKey": "1",
         "exportedSymbol": "@youwol/rx-vdom"
     },
-    "@youwol/rx-tree-views": {
-        "apiKey": "03",
-        "exportedSymbol": "@youwol/rx-tree-views"
+    "rxjs": {
+        "apiKey": "7",
+        "exportedSymbol": "rxjs"
     }
 }
 
