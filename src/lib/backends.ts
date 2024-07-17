@@ -39,7 +39,7 @@ export function prepareMessage(
     const messageArgsValues: MessageArgValue<unknown>[] = messageArgs.map(
         (messageArg) => ({
             dump: isMessageArgWrapped(messageArg)
-                ? messageArg.dump ?? false
+                ? (messageArg.dump ?? false)
                 : false,
             value: messageArgToValue(messageArg),
         }),
