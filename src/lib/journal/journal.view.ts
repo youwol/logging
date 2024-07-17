@@ -20,7 +20,7 @@ export class JournalState {
 
 export class JournalView implements VirtualDOM<'div'> {
     static defaultOptions: OptionsJournalView = {
-        containerClass: 'd-flex flex-column p-3',
+        containerClass: 'd-flex flex-column',
         containerStyle: { 'min-height': '0px' },
     }
     public readonly tag = 'div'
@@ -88,8 +88,8 @@ export class JournalView implements VirtualDOM<'div'> {
                 {
                     tag: 'div',
                     innerText: 'Available pages:',
-                    class: 'px-2',
                 },
+                { tag: 'div', class: 'mx-1' },
                 {
                     tag: 'select',
                     children: items.map((page, i) => ({
@@ -136,7 +136,7 @@ export class JournalView implements VirtualDOM<'div'> {
                     state,
                     dataViewsFactory: this.dataViewsFactory,
                     options: {
-                        containerClass: 'p-4 flex-grow-1 overflow-auto',
+                        containerClass: 'flex-grow-1 overflow-auto',
                     },
                 }),
             ],
@@ -241,7 +241,7 @@ export class ContextState extends ImmutableTree.State<NodeBase> {
 
 export class ContextView implements VirtualDOM<'div'> {
     static defaultOptions = {
-        containerClass: 'p-4 fv-bg-background fv-text-primary',
+        containerClass: 'p-2',
         containerStyle: { width: '100%', height: '100%' },
         treeViewClass: 'h-100 overflow-auto',
         treeViewStyle: {},
@@ -282,7 +282,7 @@ export class ContextView implements VirtualDOM<'div'> {
             style: styling.treeViewStyle,
             options: {
                 classes: {
-                    header: 'd-flex align-items-baseline fv-tree-header fv-hover-bg-background-alt ',
+                    header: 'd-flex align-items-baseline fv-tree-header',
                 },
             },
         })
@@ -306,8 +306,8 @@ function headerView(
             (100 * node.context.elapsed()) / (state.tEnd - state.tStart)
         const elapsed = Math.floor(100 * node.context.elapsed()) / 100
         const classes = {
-            [ContextStatus.FAILED]: 'fas fa-times fv-text-error',
-            [ContextStatus.SUCCESS]: 'fas fa-check fv-text-success',
+            [ContextStatus.FAILED]: 'fas fa-times text-danger',
+            [ContextStatus.SUCCESS]: 'fas fa-check text-success',
             [ContextStatus.RUNNING]: 'fas fa-cog fa-spin',
         }
         return {
@@ -332,7 +332,7 @@ function headerView(
                 },
                 {
                     tag: 'div',
-                    class: 'fv-bg-success',
+                    class: 'bg-success',
                     style: {
                         top: '0px',
                         height: heightBar,
@@ -348,13 +348,13 @@ function headerView(
         const tStart = node.log.timestamp - state.rootCtx.startTimestamp
         const left = (100 * tStart) / (state.tEnd - state.tStart)
 
-        let classes = 'fv-text-primary fas fa-info'
+        let classes = 'fas fa-info     '
 
         if (node instanceof LogNodeError) {
-            classes = 'fv-text-error fas fa-times'
+            classes = 'text-danger fas fa-times'
         }
         if (node instanceof LogNodeWarning) {
-            classes = 'fv-text-focus fas fa-exclamation'
+            classes = 'text-warning fas fa-exclamation'
         }
         return {
             tag: 'div',
@@ -377,7 +377,7 @@ function headerView(
                 },
                 {
                     tag: 'div',
-                    class: 'fv-bg-success rounded',
+                    class: 'bg-success rounded',
                     style: {
                         height: sizePoint,
                         width: sizePoint,
